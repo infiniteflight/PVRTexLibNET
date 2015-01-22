@@ -60,17 +60,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\PVRTexLibWrapper\bin\x86\Debug\PVRTexLibWrapper.dll" Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <Content Include="..\PVRTexLibWrapper\bin\$(Platform)\$(Configuration)\PVRTexLibWrapper.dll">
       <Link>PVRTexLibWrapper.dll</Link>
-    </Content>
-    <Content Include="..\PVRTexLibWrapper\bin\x86\Release\PVRTexLibWrapper.dll" Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-      <Link>PVRTexLibWrapper.dll</Link>
-    </Content>
-    <Content Include="..\PVRTexLibWrapper\bin\x64\Debug\PVRTexLibWrapper.dll" Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-      <Link>PVRTexLibWrapper.dll</Link>
-    </Content>
-    <Content Include="..\PVRTexLibWrapper\bin\x64\Release\PVRTexLibWrapper.dll" Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-        <Link>PVRTexLibWrapper.dll</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
@@ -80,5 +72,5 @@
   </Target>
   <Target Name="AfterBuild">
   </Target>
-  -->
+    -->
 </Project>
