@@ -1,0 +1,41 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PVRTexLibNET", "PVRTexLibNET\PVRTexLibNET.csproj", "{BAAF1192-884B-4DA2-8C93-E738C2F452A4}"
+	ProjectSection(ProjectDependencies) = postProject
+		{7CC59D82-06E1-4BA7-8644-2552CBC34316} = {7CC59D82-06E1-4BA7-8644-2552CBC34316}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PVRTexLibWrapper", "PVRTexLibWrapper\PVRTexLibWrapper.vcxproj", "{7CC59D82-06E1-4BA7-8644-2552CBC34316}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BAAF1192-884B-4DA2-8C93-E738C2F452A4}.Debug|x64.ActiveCfg = Debug|x64
+		{BAAF1192-884B-4DA2-8C93-E738C2F452A4}.Debug|x64.Build.0 = Debug|x64
+		{BAAF1192-884B-4DA2-8C93-E738C2F452A4}.Debug|x86.ActiveCfg = Debug|x86
+		{BAAF1192-884B-4DA2-8C93-E738C2F452A4}.Debug|x86.Build.0 = Debug|x86
+		{BAAF1192-884B-4DA2-8C93-E738C2F452A4}.Release|x64.ActiveCfg = Release|x64
+		{BAAF1192-884B-4DA2-8C93-E738C2F452A4}.Release|x64.Build.0 = Release|x64
+		{BAAF1192-884B-4DA2-8C93-E738C2F452A4}.Release|x86.ActiveCfg = Release|x86
+		{BAAF1192-884B-4DA2-8C93-E738C2F452A4}.Release|x86.Build.0 = Release|x86
+		{7CC59D82-06E1-4BA7-8644-2552CBC34316}.Debug|x64.ActiveCfg = Debug|x64
+		{7CC59D82-06E1-4BA7-8644-2552CBC34316}.Debug|x64.Build.0 = Debug|x64
+		{7CC59D82-06E1-4BA7-8644-2552CBC34316}.Debug|x86.ActiveCfg = Debug|Win32
+		{7CC59D82-06E1-4BA7-8644-2552CBC34316}.Debug|x86.Build.0 = Debug|Win32
+		{7CC59D82-06E1-4BA7-8644-2552CBC34316}.Release|x64.ActiveCfg = Release|x64
+		{7CC59D82-06E1-4BA7-8644-2552CBC34316}.Release|x64.Build.0 = Release|x64
+		{7CC59D82-06E1-4BA7-8644-2552CBC34316}.Release|x86.ActiveCfg = Release|Win32
+		{7CC59D82-06E1-4BA7-8644-2552CBC34316}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
