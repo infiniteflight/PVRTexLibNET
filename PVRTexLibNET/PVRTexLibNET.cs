@@ -92,49 +92,102 @@ namespace PVRTexLibNET
 		ETCSlowPerceptual
     }
 
-    public static class PVRTexture
+    public class PVRTexture : IDisposable
     {
+        #region Interop
         private const string dllName = "PVRTexLibWrapper.dll";
 
         [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void CreateTexture(IntPtr data, uint u32Width, uint u32Height, uint u32Depth, PixelFormat ptFormat, bool preMultiplied, VariableType eChannelType, ColourSpace eColourspace);
+        public static extern IntPtr CreateTexture(IntPtr data, uint u32Width, uint u32Height, uint u32Depth, PixelFormat ptFormat, bool preMultiplied, VariableType eChannelType, ColourSpace eColourspace);
+        
+        [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
+        public static extern IntPtr CreateTexture(string filePath);
 
-        public static void CreateTexture<T>(T[] data, uint u32Width, uint u32Height, uint u32Depth, PixelFormat ptFormat, bool preMultiplied, VariableType eChannelType, ColourSpace eColourspace)
+        [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
+        public static extern bool SaveTexture(IntPtr pPvrTexture, string filePath);
+
+        [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void DestroyTexture(IntPtr pPvrTexture);
+
+        [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
+        public static extern bool Resize(IntPtr pPvrTexture, uint u32NewWidth, uint u32NewHeight, uint u32NewDepth, ResizeMode eResizeMode);
+
+        [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
+        public static extern bool GenerateMIPMaps(IntPtr pPvrTexture, ResizeMode eFilterMode, uint uiMIPMapsToDo = int.MaxValue);
+
+        [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
+        public static extern bool Transcode(IntPtr pPvrTexture, PixelFormat ptFormat, VariableType eChannelType, ColourSpace eColourspace, CompressorQuality eQuality = CompressorQuality.PVRTCNormal, bool bDoDither = false);
+
+        [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
+        public static extern uint GetTextureDataSize(IntPtr pPvrTexture, int iMIPLevel = -1);
+
+        [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void GetTextureData(IntPtr pPvrTexture, IntPtr data, uint dataSize, uint uiMIPLevel = 0);
+        #endregion Interop
+
+        private IntPtr _pPvrTexture = IntPtr.Zero;
+
+        public IntPtr PvrTexturePointer { get { return _pPvrTexture; } }
+        
+        public PVRTexture(string filePath)
+        {
+            this._pPvrTexture = CreateTexture(filePath);
+        }
+        
+        public static PVRTexture CreateTexture<T>(T[] data, uint u32Width, uint u32Height, uint u32Depth, PixelFormat ptFormat, bool preMultiplied, VariableType eChannelType, ColourSpace eColourspace) where T : struct
         {
             var gcHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
-            CreateTexture(gcHandle.AddrOfPinnedObject(), u32Width, u32Height, u32Depth, ptFormat, preMultiplied, eChannelType, eColourspace);
+            var pPvrTexture = CreateTexture(gcHandle.AddrOfPinnedObject(), u32Width, u32Height, u32Depth, ptFormat, preMultiplied, eChannelType, eColourspace);
+            gcHandle.Free();
+            return new PVRTexture(pPvrTexture);
+        }
+
+        internal PVRTexture(IntPtr pPvrTexture)
+        {
+            this._pPvrTexture = pPvrTexture;
+        }
+        
+        public bool SaveTexture(string filePath)
+        {
+            return SaveTexture(_pPvrTexture, filePath);
+        }
+
+        public bool Resize(uint u32NewWidth, uint u32NewHeight, uint u32NewDepth, ResizeMode eResizeMode)
+        {
+            return Resize(_pPvrTexture, u32NewWidth, u32NewHeight, u32NewDepth, eResizeMode);
+        }
+        
+        public bool GenerateMIPMaps(ResizeMode eFilterMode, uint uiMIPMapsToDo = int.MaxValue)
+        {
+            return GenerateMIPMaps(_pPvrTexture, eFilterMode, uiMIPMapsToDo);
+        }
+
+        public bool Transcode(PixelFormat ptFormat, VariableType eChannelType, ColourSpace eColourspace, CompressorQuality eQuality = CompressorQuality.PVRTCNormal, bool bDoDither = false)
+        {
+            return Transcode(_pPvrTexture, ptFormat, eChannelType, eColourspace, eQuality, bDoDither);
+        }
+
+        public uint GetTextureDataSize(int iMIPLevel = -1)
+        {
+            return GetTextureDataSize(_pPvrTexture, iMIPLevel);
+        }
+
+        public void GetTextureData<T>(T[] data, uint dataSize, uint uiMIPLevel = 0) where T : struct
+        {
+            var gcHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
+            GetTextureData(_pPvrTexture, gcHandle.AddrOfPinnedObject(), dataSize, uiMIPLevel);
             gcHandle.Free();
         }
 
-        [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void CreateTexture(string filePath);
-
-        [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool SaveTexture(string filePath);
-
-        [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void DestroyTexture();
-
-        [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool Resize(uint u32NewWidth, uint u32NewHeight, uint u32NewDepth, ResizeMode eResizeMode);
-
-        [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool GenerateMIPMaps(ResizeMode eFilterMode, uint uiMIPMapsToDo = int.MaxValue);
-
-        [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool Transcode(PixelFormat ptFormat, VariableType eChannelType, ColourSpace eColourspace, CompressorQuality eQuality = CompressorQuality.PVRTCNormal, bool bDoDither = false);
-
-        [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
-        public static extern uint GetTextureDataSize(int iMIPLevel = -1);
-
-        [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void GetTextureData(IntPtr data, uint dataSize, uint uiMIPLevel = 0);
-
-        public static void GetTextureData<T>(T[] data, uint dataSize, uint uiMIPLevel = 0)
+        #region Implement IDisposable
+        public void Dispose()
         {
-            var gcHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
-            GetTextureData(gcHandle.AddrOfPinnedObject(), dataSize, uiMIPLevel);
-            gcHandle.Free();
+            if (_pPvrTexture != IntPtr.Zero)
+            {
+                DestroyTexture(_pPvrTexture);
+                _pPvrTexture = IntPtr.Zero;
+            }
         }
+        #endregion
     }
 }
