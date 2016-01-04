@@ -126,8 +126,10 @@ namespace PVRTexLibNET
         #endregion Interop
 
         private IntPtr _pPvrTexture = IntPtr.Zero;
+        private bool _isDisposed = false;
 
         public IntPtr PvrTexturePointer { get { return _pPvrTexture; } }
+        public bool IsDisposed { get {return _isDisposed; } }
         
         public PVRTexture(string filePath)
         {
@@ -146,47 +148,71 @@ namespace PVRTexLibNET
         {
             this._pPvrTexture = pPvrTexture;
         }
+
+        ~PVRTexture()
+        {
+            Dispose(false);
+        }
         
         public bool SaveTexture(string filePath)
         {
+            if (IsDisposed) throw new ObjectDisposedException("_pPvrTexture");
             return SaveTexture(_pPvrTexture, filePath);
         }
 
         public bool Resize(uint u32NewWidth, uint u32NewHeight, uint u32NewDepth, ResizeMode eResizeMode)
         {
+            if (IsDisposed) throw new ObjectDisposedException("_pPvrTexture");
             return Resize(_pPvrTexture, u32NewWidth, u32NewHeight, u32NewDepth, eResizeMode);
         }
         
         public bool GenerateMIPMaps(ResizeMode eFilterMode, uint uiMIPMapsToDo = int.MaxValue)
         {
+            if (IsDisposed) throw new ObjectDisposedException("_pPvrTexture");
             return GenerateMIPMaps(_pPvrTexture, eFilterMode, uiMIPMapsToDo);
         }
 
         public bool Transcode(PixelFormat ptFormat, VariableType eChannelType, ColourSpace eColourspace, CompressorQuality eQuality = CompressorQuality.PVRTCNormal, bool bDoDither = false)
         {
+            if (IsDisposed) throw new ObjectDisposedException("_pPvrTexture");
             return Transcode(_pPvrTexture, ptFormat, eChannelType, eColourspace, eQuality, bDoDither);
         }
 
         public uint GetTextureDataSize(int iMIPLevel = -1)
         {
+            if (IsDisposed) throw new ObjectDisposedException("_pPvrTexture");
             return GetTextureDataSize(_pPvrTexture, iMIPLevel);
         }
 
         public void GetTextureData<T>(T[] data, uint dataSize, uint uiMIPLevel = 0) where T : struct
         {
+            if (IsDisposed) throw new ObjectDisposedException("_pPvrTexture");
             var gcHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
             GetTextureData(_pPvrTexture, gcHandle.AddrOfPinnedObject(), dataSize, uiMIPLevel);
             gcHandle.Free();
         }
 
-        #region Implement IDisposable
+        #region Implement IDisposable & Dispose Pattern
         public void Dispose()
         {
-            if (_pPvrTexture != IntPtr.Zero)
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (IsDisposed) return;
+
+            if (disposing)
             {
-                DestroyTexture(_pPvrTexture);
-                _pPvrTexture = IntPtr.Zero;
+                // release other disposable objects
+                
             }
+            // free resources
+            DestroyTexture(_pPvrTexture);
+            _pPvrTexture = IntPtr.Zero;
+            
+            _isDisposed = true;
         }
         #endregion
     }
