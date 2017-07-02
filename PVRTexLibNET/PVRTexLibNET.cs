@@ -50,8 +50,8 @@ namespace PVRTexLibNET
     public enum ResizeMode
     {
         Nearest,
-		Linear,
-		Cubic,
+        Linear,
+        Cubic,
     }
 
     public enum VariableType
@@ -80,16 +80,16 @@ namespace PVRTexLibNET
     public enum CompressorQuality
     {
         PVRTCFast = 0,
-		PVRTCNormal,
-		PVRTCHigh,
-		PVRTCBest,
+        PVRTCNormal,
+        PVRTCHigh,
+        PVRTCBest,
 
-		ETCFast = 0,
-		ETCFastPerceptual,
-		ETCMedium,
-		ETCMediumPerceptual,
-		ETCSlow,
-		ETCSlowPerceptual
+        ETCFast = 0,
+        ETCFastPerceptual,
+        ETCMedium,
+        ETCMediumPerceptual,
+        ETCSlow,
+        ETCSlowPerceptual
     }
 
     public class PVRTexture : IDisposable
@@ -103,8 +103,8 @@ namespace PVRTexLibNET
         [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr CreateTexture(string filePath);
 
-        [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool SaveTexture(IntPtr pPvrTexture, string filePath);
+        [DllImport(dllName, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        public static extern bool SaveTexture(IntPtr pPvrTexture, [MarshalAs(UnmanagedType.LPStr)] string filePath);
 
         [DllImport(dllName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void DestroyTexture(IntPtr pPvrTexture);
@@ -157,7 +157,7 @@ namespace PVRTexLibNET
         public bool SaveTexture(string filePath)
         {
             if (IsDisposed) throw new ObjectDisposedException("_pPvrTexture");
-            return SaveTexture(_pPvrTexture, filePath);
+                return SaveTexture(_pPvrTexture, filePath);
         }
 
         public bool Resize(uint u32NewWidth, uint u32NewHeight, uint u32NewDepth, ResizeMode eResizeMode)

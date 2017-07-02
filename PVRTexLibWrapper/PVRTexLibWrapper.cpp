@@ -24,29 +24,32 @@ extern void* __cdecl CreateTexture(void* data, uint32 u32Width, uint32 u32Height
     pvrHeader.u32NumFaces = 1;
     pvrHeader.u32MIPMapCount = 1;
     pvrHeader.u32MetaDataSize = 0;
-	CPVRTexture* pvrTexture = new CPVRTexture(pvrHeader, data);
+    CPVRTexture* pvrTexture = new CPVRTexture(pvrHeader, data);
 
-	return pvrTexture;
+    return pvrTexture;
 }
 
 extern void* __cdecl CreateTextureFromFile(const char* filePath)
 {
-	CPVRTexture* pvrTexture = new CPVRTexture(filePath);
-	
-	return pvrTexture;
+    CPVRTexture* pvrTexture = new CPVRTexture(filePath);
+    
+    return pvrTexture;
 }
 
 extern bool __cdecl SaveTexture(void* pPvrTexture, const char* filePath)
 {
-	CPVRTexture* pvrTexture = (CPVRTexture*)pPvrTexture;
+    CPVRTexture* pvrTexture = (CPVRTexture*)pPvrTexture;
     if (pvrTexture == NULL)
         return false;
-    return pvrTexture->saveFile(filePath);
+    CPVRTString str;
+    str.append(filePath);
+    //CPVRTString str2 = PVRTStringGetContainingDirectoryPath(str);
+    return pvrTexture->saveFile(str);
 }
 
 extern void __cdecl DestroyTexture(void* pPvrTexture)
 {
-	CPVRTexture* pvrTexture = (CPVRTexture*)pPvrTexture;
+    CPVRTexture* pvrTexture = (CPVRTexture*)pPvrTexture;
     if (pvrTexture != NULL)
     {
         delete pvrTexture;
@@ -55,7 +58,7 @@ extern void __cdecl DestroyTexture(void* pPvrTexture)
 
 extern bool __cdecl Resize(void* pPvrTexture, uint32 u32NewWidth, uint32 u32NewHeight, uint32 u32NewDepth, EResizeMode eResizeMode)
 {
-	CPVRTexture* pvrTexture = (CPVRTexture*)pPvrTexture;
+    CPVRTexture* pvrTexture = (CPVRTexture*)pPvrTexture;
     if (pvrTexture == NULL)
         return false;
     return pvrtexture::Resize(*pvrTexture, u32NewWidth, u32NewHeight, u32NewDepth, eResizeMode);
@@ -63,7 +66,7 @@ extern bool __cdecl Resize(void* pPvrTexture, uint32 u32NewWidth, uint32 u32NewH
 
 extern bool __cdecl PremultiplyAlpha(void* pPvrTexture)
 {
-	CPVRTexture* pvrTexture = (CPVRTexture*)pPvrTexture;
+    CPVRTexture* pvrTexture = (CPVRTexture*)pPvrTexture;
     if (pvrTexture == NULL)
         return false;
     return pvrtexture::PreMultiplyAlpha(*pvrTexture);
@@ -71,7 +74,7 @@ extern bool __cdecl PremultiplyAlpha(void* pPvrTexture)
 
 extern bool __cdecl GenerateMIPMaps(void* pPvrTexture, EResizeMode eFilterMode, uint32 uiMIPMapsToDo)
 {
-	CPVRTexture* pvrTexture = (CPVRTexture*)pPvrTexture;
+    CPVRTexture* pvrTexture = (CPVRTexture*)pPvrTexture;
     if (pvrTexture == NULL)
         return false;
     return pvrtexture::GenerateMIPMaps(*pvrTexture, eFilterMode, uiMIPMapsToDo);
@@ -79,7 +82,7 @@ extern bool __cdecl GenerateMIPMaps(void* pPvrTexture, EResizeMode eFilterMode, 
 
 extern bool __cdecl Transcode(void* pPvrTexture, PixelType ptFormat, EPVRTVariableType eChannelType, EPVRTColourSpace eColourspace, ECompressorQuality eQuality, bool bDoDither)
 {
-	CPVRTexture* pvrTexture = (CPVRTexture*)pPvrTexture;
+    CPVRTexture* pvrTexture = (CPVRTexture*)pPvrTexture;
     if (pvrTexture == NULL)
         return false;
     return pvrtexture::Transcode(*pvrTexture, ptFormat, eChannelType, eColourspace, eQuality, bDoDither);
@@ -87,7 +90,7 @@ extern bool __cdecl Transcode(void* pPvrTexture, PixelType ptFormat, EPVRTVariab
 
 extern uint32 __cdecl GetTextureDataSize(void* pPvrTexture, int32 iMIPLevel)
 {
-	CPVRTexture* pvrTexture = (CPVRTexture*)pPvrTexture;
+    CPVRTexture* pvrTexture = (CPVRTexture*)pPvrTexture;
     if (pvrTexture == NULL)
         return 0;
     return pvrTexture->getDataSize(iMIPLevel);
@@ -95,7 +98,7 @@ extern uint32 __cdecl GetTextureDataSize(void* pPvrTexture, int32 iMIPLevel)
 
 extern void __cdecl GetTextureData(void* pPvrTexture, void* data, uint32 dataSize, uint32 uiMIPLevel)
 {
-	CPVRTexture* pvrTexture = (CPVRTexture*)pPvrTexture;
+    CPVRTexture* pvrTexture = (CPVRTexture*)pPvrTexture;
     if (pvrTexture == NULL)
         return;
     memcpy(data, pvrTexture->getDataPtr(uiMIPLevel), dataSize);

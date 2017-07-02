@@ -169,6 +169,13 @@ namespace pvrtexture
 		*************************************************************************/
 		bool saveFileLegacyPVR(const CPVRTString& filepath, ELegacyApi eApi) const;
 
+		/*!***********************************************************************
+		@brief      	Saves an ASTC File.
+		@param[in]	    filepath        File path to write to
+		@return			True if the method succeeds.
+		*************************************************************************/
+		bool saveASTCFile(const CPVRTString& filepath) const;
+
 	private:
 		size_t	m_stDataSize;		//!< Size of the texture data.
 		uint8*	m_pTextureData;		//!< Pointer to texture data.
@@ -191,31 +198,45 @@ namespace pvrtexture
 
 		/*!***********************************************************************
 		 @brief      	Loads a KTX file.
-		 @param[in]		pTextureFile    PVR texture file
+		 @param[in]		pTextureFile    KTX texture file
 		 @return		True if the method succeeds.
 		*************************************************************************/
 		bool privateLoadKTXFile(FILE* pTextureFile);
 
 		/*!***********************************************************************
 		 @brief      	Saves a KTX File.
-		 @param[in]		pTextureFile    PVR texture file
+		 @param[in]		pTextureFile    KTX texture file
 		 @return		True if the method succeeds.
 		*************************************************************************/
 		bool privateSaveKTXFile(FILE* pTextureFile) const;
 
 		/*!***********************************************************************
 		 @brief      	Loads a DDS file.
-		 @param[in]		pTextureFile    PVR texture file
+		 @param[in]		pTextureFile    DDS texture file
 		 @return		True if the method succeeds.
 		 *************************************************************************/
 		bool privateLoadDDSFile(FILE* pTextureFile);
 
 		/*!***********************************************************************
 		 @brief      	Saves a DDS File.
-		 @param[in]		pTextureFile    PVR texture file
+		 @param[in]		pTextureFile    DDS texture file
 		 @return		True if the method succeeds.
 		*************************************************************************/
 		bool privateSaveDDSFile(FILE* pTextureFile) const;
+
+		/*!***********************************************************************
+		@brief      	Loads an ASTC file.
+		@param[in]		pTextureFile    ASTC texture file
+		@return			True if the method succeeds.
+		*************************************************************************/
+		bool privateLoadASTCFile(FILE* pTextureFile);
+
+		/*!***********************************************************************
+		@brief      	Saves an ASTC file.
+		@param[in]		pTextureFile    ASTC texture file
+		@return			True if the method succeeds.
+		*************************************************************************/
+		bool privateSaveASTCFile(FILE* pTextureFile) const;
 
 	//Legacy IO
     
